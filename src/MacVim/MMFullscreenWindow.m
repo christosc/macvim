@@ -343,7 +343,7 @@ enum {
     // entire window, etc.).
     NSPoint origin = { floor((outer.size.width - inner.size.width)/2),
                        floor((outer.size.height - inner.size.height)/2) };
-
+    origin.y -= 15;
     [view setFrameOrigin:origin];
 }
 
@@ -403,7 +403,7 @@ enum {
     // the monitor, this will probably not work right.
 
     if ([self isOnPrimaryScreen]) {
-        SetSystemUIMode(kUIModeAllSuppressed, 0); //requires 10.3
+        SetSystemUIMode(kUIModeContentSuppressed, 0); //requires 10.3
     }
 }
 
@@ -423,6 +423,9 @@ enum {
     // Window may move as a result of being dragged between Spaces.
     ASLogDebug(@"Full screen window moved, ensuring it covers the screen...");
 
+//    CGRect frame = [[self screen] frame];
+//    frame.size.height -= 22;
+    
     // Ensure the full screen window is still covering the entire screen and
     // then resize view according to 'fuopt'.
     [self setFrame:[[self screen] frame] display:NO];
@@ -468,6 +471,7 @@ enum {
     // size since it compensates for menu and dock.
     int maxRows, maxColumns;
     NSSize size = [[self screen] frame].size;
+    size.height -= 20;
     [view constrainRows:&maxRows columns:&maxColumns toSize:size];
 
     // Compute current fu size
